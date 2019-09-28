@@ -7,7 +7,7 @@ build/
 DerivedData/
 
 ## Various settings
-*.pbxuser
+/*.xcodeproj
 !default.pbxuser
 *.mode1v3
 !default.mode1v3
@@ -66,3 +66,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+## other
+
+.DS_Store
+/.build
+/Packages
