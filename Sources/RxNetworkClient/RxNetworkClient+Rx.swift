@@ -11,7 +11,7 @@ import Logger
 import Multipart
 import RxCocoa
 
-extension Reactive where Base: RxNetworkClient {
+public extension Reactive where Base: RxNetworkClient {
     
     /// Makes a request to member api servers returning the response as an Single<Data>
     /// This code will gaurentee that ther response is a success otherwise it will return an Single.Error
