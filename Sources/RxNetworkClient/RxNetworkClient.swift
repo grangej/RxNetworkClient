@@ -23,7 +23,7 @@ public protocol Tracer {
     func onStop(success: Bool)
 }
 
-public protocol TracingDataSource {
+public protocol TracingDataSource: class {
     
     func tracer(endpoint: ClientURL, requestType: HTTPMethod) -> Tracer
 }
