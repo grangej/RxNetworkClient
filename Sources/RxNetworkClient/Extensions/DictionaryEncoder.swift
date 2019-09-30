@@ -7,24 +7,24 @@
 
 import Foundation
 
-class DictionaryEncoder {
-    var result: [String: String]
+public class DictionaryEncoder {
+    public var result: [String: String]
 
-    init() {
+    public init() {
         result = [:]
     }
 
-    func encode(_ encodable: DictionaryEncodable) -> [String: String] {
+    public func encode(_ encodable: DictionaryEncodable) -> [String: String] {
 
         encodable.encode(self)
         return result
     }
 
-    func encode<T, K>(_ value: T, key: K) where K: RawRepresentable, K.RawValue == String, T: LosslessStringConvertible {
+    public func encode<T, K>(_ value: T, key: K) where K: RawRepresentable, K.RawValue == String, T: LosslessStringConvertible {
         result[key.rawValue] = String(value)
     }
 
-    func encodeIfPresent<T, K>(_ value: T?, key: K) where K: RawRepresentable, K.RawValue == String, T: LosslessStringConvertible {
+    public func encodeIfPresent<T, K>(_ value: T?, key: K) where K: RawRepresentable, K.RawValue == String, T: LosslessStringConvertible {
 
         guard let value = value else { return }
         result[key.rawValue] = String(value)
@@ -32,12 +32,12 @@ class DictionaryEncoder {
 }
 
 protocol DictionaryEncodable {
-    func encode(_ encoder: DictionaryEncoder)
+    public func encode(_ encoder: DictionaryEncoder)
 }
 
 extension Encodable {
 
-    func asDictionary() throws -> [String: Any] {
+    public func asDictionary() throws -> [String: Any] {
         let data = try JSONEncoder().encode(self)
         guard let dictionary = try JSONSerialization
             .jsonObject(with: data, options: .allowFragments) as? [String: Any] else {
