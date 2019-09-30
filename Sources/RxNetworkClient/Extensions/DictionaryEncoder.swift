@@ -31,8 +31,8 @@ public class DictionaryEncoder {
     }
 }
 
-protocol DictionaryEncodable {
-    public func encode(_ encoder: DictionaryEncoder)
+public protocol DictionaryEncodable {
+    func encode(_ encoder: DictionaryEncoder)
 }
 
 extension Encodable {
