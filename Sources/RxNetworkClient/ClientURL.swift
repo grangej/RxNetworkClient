@@ -21,7 +21,7 @@ public protocol ClientURL {
 
 extension ClientURL {
     
-    internal func fullURL(_ paramaters: [String: Any]) -> URL {
+    public func fullURL(_ paramaters: [String: Any]) -> URL {
         
         var urlQueryItems: [URLQueryItem]? = nil
         if let urlParams = paramaters as? [String: String] {
