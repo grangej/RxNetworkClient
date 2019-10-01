@@ -60,12 +60,12 @@ public struct AnyClientURL: Hashable, Equatable, ClientURL {
     }
 }
 
-internal class RequestLimiter {
+public class RequestLimiter {
 
     private let queue = DispatchQueue(label: "RequestLimiter.Queue")
     private var requests = [AnyClientURL: [RequestLimiterURL: Date]]()
 
-    func shouldMakeRequest(_ clientUrl: ClientURL, fullURL: URL) -> Bool {
+    public func shouldMakeRequest(_ clientUrl: ClientURL, fullURL: URL) -> Bool {
 
         return queue.sync {
 
@@ -81,7 +81,7 @@ internal class RequestLimiter {
         }
     }
 
-    func didCompleteRequest(_ clientUrl: ClientURL, fullURL: URL) {
+    public func didCompleteRequest(_ clientUrl: ClientURL, fullURL: URL) {
 
         queue.sync { [weak self] in
 
@@ -101,13 +101,13 @@ internal class RequestLimiter {
         }
     }
 
-    func invalidate(_ url: ClientURL) {
+    public func invalidate(_ url: ClientURL) {
         
         let anyClientUrl = AnyClientURL(url)
         requests[anyClientUrl] = [:]
     }
 
-    func invalidateAll() {
+    public func invalidateAll() {
 
         requests = [AnyClientURL: [RequestLimiterURL: Date]]()
     }

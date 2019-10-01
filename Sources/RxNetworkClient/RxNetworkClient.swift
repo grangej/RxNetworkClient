@@ -56,7 +56,7 @@ open class RxNetworkClient: NSObject {
 
     internal var urlSession: URLSessionProtocol!
     internal var externalAPIURLSession: URLSessionProtocol!
-    internal let requestLimiter = RequestLimiter()
+    public let requestLimiter = RequestLimiter()
 
     public let disposeBag = DisposeBag()
     
