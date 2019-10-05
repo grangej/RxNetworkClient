@@ -292,7 +292,7 @@ public extension Reactive where Base: RxNetworkClient {
                 default: // Handles 4xx, 5xx and other errors
                     clientTrace?.onStop(success: false)
                     
-                    let error = APIClientError.apiErrorWithCode(responseData: data)
+                    let error = APIClientError.apiErrorWithCode(responseData: data, statusCode: httpResponse.statusCode)
                     self.base.onRecordError.accept(error)
                     observer.onError(error)
                 }

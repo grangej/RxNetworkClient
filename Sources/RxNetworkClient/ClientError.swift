@@ -15,9 +15,8 @@ public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStr
     case parseError
     case urlRequestError(error: Error)
     case serverDown
-    case apiErrorWithCode(responseData: Data)
+    case apiErrorWithCode(responseData: Data, statusCode: Int)
     case apiErrorWithBadRequest(responseData: Data)
-//    case conversationError(error: ConversationError)
 
     public var errorDescription: String? {
 
@@ -37,8 +36,6 @@ public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStr
             return "apiErrorWithCode"
         case .apiErrorWithBadRequest:
             return "apiErrorWithBadRequest"
-//        case .conversationError(error: let error):
-//            return "ConversationError: \(error.error_message)"
         }
     }
 
