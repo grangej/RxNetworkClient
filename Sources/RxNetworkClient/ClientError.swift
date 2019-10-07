@@ -16,7 +16,7 @@ public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStr
     case urlRequestError(error: Error)
     case serverDown
     case apiErrorWithCode(responseData: Data, statusCode: Int)
-    case apiErrorWithBadRequest(responseData: Data)
+    case apiErrorWithBadRequest(responseData: Data, statusCode: Int)
 
     public var errorDescription: String? {
 

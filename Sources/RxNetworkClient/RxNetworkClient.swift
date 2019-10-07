@@ -61,13 +61,28 @@ open class RxNetworkClient: NSObject {
     public let disposeBag = DisposeBag()
     
     public static var reachability: Reachability?
+    
+    internal let authorizationFailedCodes: [Int]
+    internal let badRequestCodes: [Int]
+    internal let serverDownCodes: [Int]
+    
     public let onConnectionError: PublishRelay<Reachability.Connection> = PublishRelay()
     public let onRecordError: PublishRelay<Error> = PublishRelay()
     public let onRecordTimeout: PublishRelay<ClientURL> = PublishRelay()
+    public let onAuthorizationFailed: PublishRelay<ClientError> = PublishRelay()
     public weak var tracingDataSource: TracingDataSource?
     
-    public init(urlSession: URLSessionProtocol? = nil) {
+    public init(urlSession: URLSessionProtocol? = nil,
+                badRequestCodes: [Int] = [400, 500],
+                authorizationFailedCodes: [Int] = [401],
+                serverDownCodes: [Int] = [502],
+                tracingDataSource: TracingDataSource? = nil) {
 
+        self.serverDownCodes = serverDownCodes
+        self.badRequestCodes = badRequestCodes
+        self.authorizationFailedCodes = authorizationFailedCodes
+        self.tracingDataSource = tracingDataSource
+        
         super.init()
 
         if let urlSession = urlSession {

@@ -277,13 +277,19 @@ public extension Reactive where Base: RxNetworkClient {
                     
                     // FIXME: Can we handle redirect??
                     observer.onNext(data)
-                case 400, 500:
+                case self.base.badRequestCodes:
                     clientTrace?.onStop(success: false)
-                    
-                    let error = APIClientError.apiErrorWithBadRequest(responseData: data)
+                   
+                    let error = APIClientError.apiErrorWithBadRequest(responseData: data, statusCode: httpResponse.statusCode)
                     self.base.onRecordError.accept(error)
                     observer.onError(error)
-                case 502:
+                case self.base.authorizationFailedCodes:
+                    clientTrace?.onStop(success: false)
+                    let error = APIClientError.apiErrorWithCode(responseData: data, statusCode: httpResponse.statusCode)
+                    self.base.onRecordError.accept(error)
+                    self.base.onAuthorizationFailed.accept(error)
+                    observer.onError(error)
+                case self.base.serverDownCodes:
                     clientTrace?.onStop(success: false)
                     
                     let error = APIClientError.serverDown
@@ -321,4 +327,8 @@ public extension Reactive where Base: RxNetworkClient {
             
         }).asSingle()
     }
+}
+
+func ~=<T : Equatable>(array: [T], value: T) -> Bool {
+    return array.contains(value)
 }
