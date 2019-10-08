@@ -17,6 +17,9 @@ public protocol ClientURL {
     
     /// The absolute URL that will be used to genereate the request
     var absoluteUrl: URL! { get }
+    
+    /// If we should attempt to ecnode paramters in get
+    var shouldEscape: Bool { get }
 }
 
 extension ClientURL {
@@ -28,7 +31,14 @@ extension ClientURL {
 
             urlQueryItems = urlParams.map({ (paramater) -> URLQueryItem in
 
-                return URLQueryItem(name: paramater.key, value: paramater.value)
+                if self.shouldEscape {
+
+                    return URLQueryItem(name: paramater.key, value: paramater.value.stringByAddingPercentEncodingForRFC3986())
+                }
+                else {
+
+                    return URLQueryItem(name: paramater.key, value: paramater.value)
+                }
             })
         }
 

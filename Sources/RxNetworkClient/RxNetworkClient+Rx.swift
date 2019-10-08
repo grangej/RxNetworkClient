@@ -64,8 +64,15 @@ public extension Reactive where Base: RxNetworkClient {
             let urlParams = parameters
             
             let queryItems = urlParams.map({ (paramater) -> URLQueryItem in
-                
-                return URLQueryItem(name: paramater.key, value: paramater.value)
+
+                if apiClientURL.shouldEscape {
+
+                    return URLQueryItem(name: paramater.key, value: paramater.value.stringByAddingPercentEncodingForRFC3986())
+                }
+                else {
+
+                    return URLQueryItem(name: paramater.key, value: paramater.value)
+                }
             })
             
             return self.response(apiClientURL: apiClientURL,
@@ -171,6 +178,14 @@ public extension Reactive where Base: RxNetworkClient {
                 return Single.error(APIClientError.invalidUrlError)
         }
         
+        var headers: [String: String]?
+        
+        do {
+            headers = try header.headers()
+        } catch {
+            return Single.error(error)
+        }
+        
         sdn_log(object: "APIClient request begin", category: Category.api, logType: .debug)
         
         sdn_log(object: "<----------------------Request parameters----------------------",
@@ -195,7 +210,7 @@ public extension Reactive where Base: RxNetworkClient {
         
         sdn_log(object: "Header: \(header)", category: Category.api, logType: .debug)
         
-        if let headers = header.headers {
+        if let headers = headers {
             
             sdn_log(object: "Headers: \(headers)", category: Category.api, logType: .debug)
         }
@@ -207,8 +222,7 @@ public extension Reactive where Base: RxNetworkClient {
         return Observable.create { observer in
             
             let urlSession: URLSessionProtocol! = self.base.urlSession
-            
-            var request = URLRequest(url: requestUrl, method: requestType, headers: header.headers, timeoutInterval: apiClientURL.timeout, httpBody: httpBody)
+            var request = URLRequest(url: requestUrl, method: requestType, headers: headers, timeoutInterval: apiClientURL.timeout, httpBody: httpBody)
             
             switch parameterEncoding {
                 

@@ -48,6 +48,7 @@ public struct AnyClientURL: Hashable, Equatable, ClientURL {
         return url.isExpired(date)
     }
     
+    public var shouldEscape: Bool { return url.shouldEscape }
     public var timeout: TimeInterval { return url.timeout }
             
     public var absoluteUrl: URL! { return url.absoluteUrl }
