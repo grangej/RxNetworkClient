@@ -9,5 +9,5 @@ import Foundation
 
 public protocol ClientHeader {
     
-    var headers: [String: String]? { get }
+    func headers() throws -> [String: String]?
 }
