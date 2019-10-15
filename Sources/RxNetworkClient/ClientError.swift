@@ -7,6 +7,30 @@
 
 import Foundation
 
+public enum ConnectionError: LocalizedError, CustomDebugStringConvertible, CustomStringConvertible {
+
+    case serverDown
+    case internetDown
+
+    public var errorDescription: String? {
+
+        return debugDescription
+    }
+
+    public var debugDescription: String {
+
+        switch self {
+
+        case .serverDown: return "severDown"
+        case .internetDown: return "internetDown"
+        }
+    }
+
+    public var description: String {
+        return debugDescription
+    }
+}
+
 public typealias APIClientError = ClientError
 
 public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStringConvertible {
@@ -14,7 +38,6 @@ public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStr
     case invalidUrlError
     case parseError
     case urlRequestError(error: Error)
-    case serverDown
     case apiErrorWithCode(responseData: Data, statusCode: Int)
     case apiErrorWithBadRequest(responseData: Data, statusCode: Int)
 
@@ -31,7 +54,6 @@ public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStr
         case .parseError: return "parseError"
         case .urlRequestError(error: let error):
             return "UrlRequestError: \(error.localizedDescription)"
-        case .serverDown: return "severDown"
         case .apiErrorWithCode:
             return "apiErrorWithCode"
         case .apiErrorWithBadRequest:
@@ -101,7 +123,7 @@ public extension Error {
             throw self
         } catch ClientError.urlRequestError {
             return false
-        } catch ClientError.serverDown {
+        } catch ConnectionError.serverDown {
             return true
         } catch {
 

@@ -66,7 +66,7 @@ open class RxNetworkClient: NSObject {
     internal let badRequestCodes: [Int]
     internal let serverDownCodes: [Int]
     
-    public let onConnectionError: PublishRelay<Reachability.Connection> = PublishRelay()
+    public let onConnectionError: PublishRelay<ConnectionError> = PublishRelay()
     public let onRecordError: PublishRelay<Error> = PublishRelay()
     public let onRecordTimeout: PublishRelay<ClientURL> = PublishRelay()
     public let onAuthorizationFailed: PublishRelay<ClientError> = PublishRelay()

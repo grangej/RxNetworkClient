@@ -306,7 +306,7 @@ public extension Reactive where Base: RxNetworkClient {
                 case self.base.serverDownCodes:
                     clientTrace?.onStop(success: false)
                     
-                    let error = APIClientError.serverDown
+                    let error = ConnectionError.serverDown
                     self.base.onRecordError.accept(error)
                     observer.onError(error)
                 default: // Handles 4xx, 5xx and other errors
@@ -337,7 +337,10 @@ public extension Reactive where Base: RxNetworkClient {
             guard error.shouldFail else { return }
             
             guard let connection = RxNetworkClient.reachability?.connection else { return }
-            self.base.onConnectionError.accept(connection)
+
+            let errorType: ConnectionError = (connection != .none) ? .serverDown : .internetDown
+
+            self.base.onConnectionError.accept(errorType)
             
         }).asSingle()
     }
