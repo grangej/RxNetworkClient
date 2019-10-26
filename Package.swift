@@ -20,7 +20,7 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/ReactiveX/RxSwift.git", from: "5.0.0"),
         .package(url: "https://github.com/grangej/Logger.git", from: "5.2.0"),
-        .package(url: "https://github.com/vapor/multipart.git", from: "3.0.0"),
+        .package(url: "https://github.com/vapor/multipart.git", .exact("3.0.4")),
         .package(url: "https://github.com/ashleymills/Reachability.swift.git", from: "4.0.0")
     ],
     targets: [
