@@ -65,14 +65,7 @@ public extension Reactive where Base: RxNetworkClient {
             
             let queryItems = urlParams.map({ (paramater) -> URLQueryItem in
 
-                if apiClientURL.shouldEscape {
-
-                    return URLQueryItem(name: paramater.key, value: paramater.value.stringByAddingPercentEncodingForRFC3986())
-                }
-                else {
-
-                    return URLQueryItem(name: paramater.key, value: paramater.value)
-                }
+                return URLQueryItem(name: paramater.key, value: paramater.value)
             })
             
             return self.response(apiClientURL: apiClientURL,
