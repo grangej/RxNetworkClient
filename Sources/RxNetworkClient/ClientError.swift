@@ -34,9 +34,9 @@ public enum ConnectionError: LocalizedError, CustomDebugStringConvertible, Custo
 public typealias APIClientError = ClientError
 
 public struct AuthFailure {
-    let url: ClientURL
-    let token: String?
-    let method: HTTPMethod
+    public let url: ClientURL
+    public let token: String?
+    public let method: HTTPMethod
 }
 
 public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStringConvertible {
