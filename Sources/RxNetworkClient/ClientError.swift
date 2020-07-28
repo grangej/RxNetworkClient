@@ -33,12 +33,20 @@ public enum ConnectionError: LocalizedError, CustomDebugStringConvertible, Custo
 
 public typealias APIClientError = ClientError
 
+public struct AuthFailure {
+    let url: ClientURL
+    let token: String?
+    let method: HTTPMethod
+}
+
 public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStringConvertible {
 
     case invalidUrlError
     case parseError
     case urlRequestError(error: Error)
     case apiErrorWithCode(responseData: Data, statusCode: Int)
+    case authorizationFailed(failureData: AuthFailure)
+    case missingAuthorizationToken(failureData: AuthFailure?)
     case apiErrorWithBadRequest(responseData: Data, statusCode: Int)
 
     public var errorDescription: String? {
@@ -58,6 +66,12 @@ public enum ClientError: LocalizedError, CustomDebugStringConvertible, CustomStr
             return "apiErrorWithCode"
         case .apiErrorWithBadRequest:
             return "apiErrorWithBadRequest"
+        case .authorizationFailed(failureData: let failureData):
+            return "authorizationFailed: \(failureData.method.rawValue) - \(failureData.url.absoluteUrl.absoluteString)"
+        case .missingAuthorizationToken(failureData: let .some(failureData)):
+            return "missingAuthorizationToken: \(failureData.method.rawValue) - \(failureData.url.absoluteUrl.absoluteString)"
+        case .missingAuthorizationToken:
+            return "missingAuthorizationToken"
         }
     }
 
@@ -101,7 +115,7 @@ public extension Error {
 
         guard let connection = RxNetworkClient.reachability?.connection else { return false }
 
-        if connection == .none { return true }
+        if connection == .unavailable { return true }
         
         let baseError = self as NSError
 

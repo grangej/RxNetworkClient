@@ -10,4 +10,5 @@ import Foundation
 public protocol ClientHeader {
     
     func headers() throws -> [String: String]?
+    var token: String? { get }
 }

@@ -175,6 +175,11 @@ public extension Reactive where Base: RxNetworkClient {
         
         do {
             headers = try header.headers()
+        } catch APIClientError.missingAuthorizationToken {
+
+            let error = APIClientError.missingAuthorizationToken(failureData: AuthFailure(url: apiClientURL, token: nil, method: requestType))
+            self.base.onAuthorizationFailed.accept(error)
+            return Single.error(error)
         } catch {
             return Single.error(error)
         }
@@ -292,7 +297,7 @@ public extension Reactive where Base: RxNetworkClient {
                     observer.onError(error)
                 case self.base.authorizationFailedCodes:
                     clientTrace?.onStop(success: false)
-                    let error = APIClientError.apiErrorWithCode(responseData: data, statusCode: httpResponse.statusCode)
+                    let error = APIClientError.authorizationFailed(failureData: AuthFailure(url: apiClientURL, token: header.token, method: requestType))
                     self.base.onRecordError.accept(error)
                     self.base.onAuthorizationFailed.accept(error)
                     observer.onError(error)
@@ -331,7 +336,7 @@ public extension Reactive where Base: RxNetworkClient {
             
             guard let connection = RxNetworkClient.reachability?.connection else { return }
 
-            let errorType: ConnectionError = (connection != .none) ? .serverDown : .internetDown
+            let errorType: ConnectionError = (connection != .unavailable) ? .serverDown : .internetDown
 
             self.base.onConnectionError.accept(errorType)
             

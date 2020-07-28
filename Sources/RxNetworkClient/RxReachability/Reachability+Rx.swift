@@ -31,7 +31,7 @@ public extension Reactive where Base: Reachability {
 
     static var isReachable: Observable<Bool> {
     return reachabilityChanged
-      .map { $0.connection != .none }
+        .map { $0.connection != .unavailable }
   }
 
     static var isConnected: Observable<Void> {
@@ -66,7 +66,7 @@ public extension Reactive where Base: Reachability {
 
     var isReachable: Observable<Bool> {
     return reachabilityChanged
-      .map { $0.connection != .none }
+        .map { $0.connection != .unavailable }
   }
 
     var isConnected: Observable<Void> {
